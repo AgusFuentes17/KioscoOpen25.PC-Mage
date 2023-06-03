@@ -1,0 +1,1 @@
+# KioscoOpen25.PC-Mage
