@@ -75,6 +75,7 @@ def cargarPro():
 		else:
 			bd.cargarProducto(cod,nom,pre,int(cant))
 			botonAgPro.pack_forget()
+			botonCancelar.pack_forget()
 			main()
 	
 	def cancelar():
@@ -104,11 +105,13 @@ def actPrecio():
 	def cagarBD():
 		cod = entryCod.get()
 		pre = entryPre.get()
-		if cod == "" or pre == "":
+		cant = entryCant.get()
+		if cod == "" or pre == "" or cant == "":
 			mostrarMensaje(True, "Rellene todos los casilleros")
 		else:
-			bd.actPrecio(cod,pre)
+			bd.actPrecio(cod,pre, cant)
 			botonAgPro.pack_forget()
+			botonCancelar.pack_forget()
 			main()
 
 	def cancelar():
@@ -123,6 +126,9 @@ def actPrecio():
 	etiquetaPre.pack()
 	entryPre.delete(0,customtkinter.END)
 	entryPre.pack()
+	etiquetaCant.pack()
+	entryCant.delete(0,customtkinter.END)
+	entryCant.pack()
 	botonAgPro = customtkinter.CTkButton(app, text="Actualizar Producto", command = cagarBD)
 	botonAgPro.pack(pady= (40,0))
 	botonCancelar = customtkinter.CTkButton(app, text="Cancelar", command = cancelar)
@@ -144,7 +150,7 @@ def verInfo():
 			arr = bd.informe(fi, ff)
 			for a in arr:
 				txt = customtkinter.CTkLabel(scroll1, text = a)
-				txt.pack()
+				txt.pack(pady= (20,0))
 			
 		
 
@@ -193,7 +199,7 @@ def caja():
 		entryVuelto.pack()
 		botonVuelto.pack()
 		etiquetaV.pack()
-		botonTerminarVenta.pack(pady=(20, 20))
+		botonTerminarVenta.pack(pady=(10, 0))
 
 
 
@@ -315,7 +321,7 @@ cajaTexto2 = customtkinter.CTkEntry(app)
 boton1 = customtkinter.CTkButton(app, text="Iniciar sesion", command = ingresar)
 
 cargarProducto = customtkinter.CTkButton(app, text="Cargar Producto", command = cargarPro)
-actualizarPrecio = customtkinter.CTkButton(app, text="Actualizar Precio", command = actPrecio)
+actualizarPrecio = customtkinter.CTkButton(app, text="Actualizar Producto", command = actPrecio)
 verInforme = customtkinter.CTkButton(app, text="Ver Informe", command = verInfo)
 
 abrirCaja = customtkinter.CTkButton(app, text="Abrir caja", command = caja)

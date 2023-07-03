@@ -90,13 +90,14 @@ class BaseDatos:
             print("ocurrio un error")
 
 
-    def actPrecio(self, codBarra, precio):
+    def actPrecio(self, codBarra, precio, cant):
         myquery = { "codBarra": codBarra }
         newvalues = { "$set": { "precio": precio } }
-
+        newvalues2 = { "$set": { "cant": cant } }
         try:
             collection = self.db.producto
             collection.update_one(myquery, newvalues)
+            collection.update_one(myquery, newvalues2)
         except:
             print("An exception occurred 1")
 
@@ -110,7 +111,8 @@ class BaseDatos:
         cajasIni = collection.find({"fecha": fechaIni})
         ini = cajasIni[0]["codCaja"] - 1
         cajasFin = collection.find({"fecha": fechaFin})
-        fin = cajasFin[0]["codCaja"]
+        for i in cajasFin:
+            fin = i["codCaja"]
 
         for i in range(ini, fin):
             text = "Caja n° " + str(documentos[i]["codCaja"]) + "\n"
@@ -118,6 +120,18 @@ class BaseDatos:
             text += "Monto Inicial: " + str(documentos[i]["montoIni"]) + "\n"
             text += "Monto Final: " + str(documentos[i]["montoFin"]) + "\n"
             text += "Monto Final Prediccion: " + str(documentos[i]["montoPre"]) + "\n"
+            text += "Productos vendidos: "
+
+            colVentas = self.db.venta
+            docs = colVentas.find({"codCaja": i})
+            for doc in docs:
+                for pro in doc["arrayProductos"]:
+                    colPro = self.db.producto
+                    producto = colPro.find({"codBarra": pro})
+                    nombre = producto[0]["nom"]
+                    text += nombre + ", "
+                text += "\n"
+
             arrayCajas.append(text)
 
         return arrayCajas
